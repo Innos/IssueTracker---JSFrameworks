@@ -1,0 +1,64 @@
+<fieldset>
+    <legend>Sort:</legend>
+    <label>Title</label>
+    <input type="radio" ng-model="currentSort" value="title">
+    <label>Length</label>
+    <input type="radio" ng-model="currentSort" ng-value=['length.hours','length.minutes','length.seconds']>
+    <label>Date</label>
+    <input type="radio" ng-model="currentSort" value="date">
+    <label>Likes</label>
+    <input type="radio" ng-model="currentSort" value="-likes">
+
+</fieldset>
+
+<fieldset>
+    <legend>Filter:</legend>
+    <label>Category</label>
+    <select ng-model="currentFilter" >
+        <option ng-repeat="video in videos | unique:'category'">{{video.category}}</option>
+    </select>
+
+    <label>Date</label>
+    <select ng-model="currentFilter" >
+        <option ng-repeat="video in videos | uniqueDay:'date'" ng-value=video.date >{{video.date | date:'mediumDate'}}</option>
+    </select>
+
+    <label>Subtitles</label>
+    <select ng-model="currentFilter" >
+        <option ng-repeat="video in videos | unique:'hasSubtitles'">{{video.hasSubtitles}}</option>
+    </select>
+    <button ng-click="clearFilter()">Clear Filter</button>
+</fieldset>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Picture</th>
+        <th>Length</th>
+        <th>Category</th>
+        <th>Subscriber Count</th>
+        <th>Likes</th>
+        <th>Date</th>
+        <th>Has Subtitles</th>
+        <th>Comments</th>
+    </tr>
+    <tr ng-repeat="video in videos | filterWithDay: currentFilter | orderBy: currentSort">
+        <td>{{video.title}}</td>
+        <td><img class="image" ng-src="{{video.picture}}"></td>
+        <td>{{video.length | timeFormat}}</td>
+        <td>{{video.category}}</td>
+        <td>{{video.subscriberCount}}</td>
+        <td>{{video.likes}}</td>
+        <td>{{video.date | date:'mediumDate'}}</td>
+        <td>{{video.hasSubtitles}}</td>
+        <td>
+            <div ng-repeat="comment in video._comments">
+            <p>&quot;{{comment.content}}&quot;</p>
+            <span>Author: {{comment.username}}</span>
+            <span>{{comment.date | date:'medium'}}</span>
+            <p>Website: <a ng-href="{{comment.websiteUrl}}">{{comment.websiteUrl}}</a></p>
+            <span>---------------------------------</span>
+            </div>
+        </td>
+    </tr>
+</table>
