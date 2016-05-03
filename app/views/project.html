@@ -1,0 +1,32 @@
+<div class="headerPadding">
+</div>
+<div>
+    <div class="formField col-md-10 col-md-offset-1">
+        <img ng-src="{{separatorImage}}" class="formImage">
+
+        <label class="col-md-2">Name:</label>
+        <input class="col-md-2" disabled value="{{project.Name}}">
+        <label class="col-md-2">Description:</label>
+        <textarea class="col-md-6" disabled>{{project.Description}}</textarea>
+
+        <label class="col-md-2">Project Key:</label>
+        <input class="col-md-2" disabled value="{{project.ProjectKey}}">
+
+        <label class="col-md-2">Lead Id:</label>
+        <input class="col-md-4" disabled value="{{project.Lead.Id}}">
+        <input class="col-md-2" disabled value="{{project.Lead.Username}}">
+
+        <div class="col-md-6">
+            <label>Priorities:</label>
+            <span ng-repeat="priority in project.Priorities">{{priority.Name}}<span ng-if="!$last">, </span></span>
+        </div>
+
+        <div class="col-md-6">
+            <label>Labels:</label>
+            <span ng-repeat="label in project.Labels">{{label.Name}}<span ng-if="!$last">, </span></span>
+        </div>
+
+
+        <img ng-src="{{separatorImage}}" class="formImage">
+    </div>
+</div>
