@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('commonFilters.customFilters', [])
+angular.module('issueTracker.filters')
     .filter({
         unique: ['$parse', function ($parse) {
             return function (collection, property) {
