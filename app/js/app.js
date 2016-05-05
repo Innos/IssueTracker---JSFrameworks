@@ -11,16 +11,21 @@ angular.module('issueTracker', [
     'issueTracker.services',
     'issueTracker.filters',
     'issueTracker.directives',
-    'ui.bootstrap.pagination'
+    'ui.bootstrap.pagination',
+    'ui.bootstrap.modal',
+    'ui.bootstrap.tpls',
+    'ui.bootstrap.datepickerPopup'
 ])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/'});
     }])
     .constant("baseUrl", "http://softuni-issue-tracker.azurewebsites.net/")
     .constant("separatorImage", "resources/images/separator.png")
-    .run(['$rootScope','$location','$route','identityService', function ($rootScope,$location,$route,identityService) {
+    .run(['$rootScope','$location','$route','$http','identityService', function ($rootScope,$location,$route,$http,identityService) {
         $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-            $rootScope.title = current.$$route.title;
+            if(current.$$route){
+                $rootScope.title = current.$$route.title;
+            }
         });
         $rootScope.$on('$locationChangeStart',function(event){
             if($location.path() != "/" && !identityService.isLogged()){

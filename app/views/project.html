@@ -1,36 +1,70 @@
 <div class="headerPadding">
 </div>
 <div>
-    <div class="formField col-md-10 col-md-offset-1">
-        <img ng-src="{{separatorImage}}" class="formImage">
-
-        <div class="col-md-12">
-            <label class="col-md-2">Name:</label>
-            <input class="col-md-2" disabled value="{{project.Name}}">
-            <label class="col-md-2">Description:</label>
-            <textarea class="col-md-6" disabled>{{project.Description}}</textarea>
-        </div>
-
-        <div class="col-md-12">
-            <label class="col-md-2">Project Key:</label>
-            <input class="col-md-2" disabled value="{{project.ProjectKey}}">
-
-            <label class="col-md-2">Lead Id:</label>
-            <input class="col-md-4" disabled value="{{project.Lead.Id}}">
-            <input class="col-md-2" disabled value="{{project.Lead.Username}}">
-        </div>
-
-        <div class="col-md-12">
-            <div class="col-md-6">
-                <label>Priorities:</label>
-                <span ng-repeat="priority in project.Priorities">{{priority.Name}}<span ng-if="!$last">, </span></span>
+    <div class="formField info col-md-10 col-md-offset-1">
+        <h2 class="color-navyBlue title col-md-3">Information:</h2>
+        <a ng-show="isAuthorized" class="btn btn-warning col-md-2 col-md-offset-5 sideMargin-5" href="#/projects/{{project.Id}}/edit">Edit Project</a>
+        <a ng-show="isAuthorized" class="btn btn-primary col-md-2 sideMargin-5" href="#/projects/{{project.Id}}/add-issue">Add Issue</a>
+        <div ng-cloak ng-if="!projectLoading">
+            <div class="col-md-12">
+                <label class="col-md-2">Name:</label>
+                <input class="col-md-2 input-border-color" disabled value="{{project.Name}}">
+                <label class="col-md-2">Description:</label>
+                <textarea class="col-md-6 input-border-color" disabled>{{project.Description}}</textarea>
             </div>
 
-            <div class="col-md-6">
-                <label>Labels:</label>
-                <span ng-repeat="label in project.Labels">{{label.Name}}<span ng-if="!$last">, </span></span>
+            <div class="col-md-12">
+                <label class="col-md-2">Project Key:</label>
+                <input class="col-md-2 input-border-color" disabled value="{{project.ProjectKey}}">
+
+                <label class="col-md-2">Lead Id:</label>
+                <input class="col-md-4 input-border-color" disabled value="{{project.Lead.Id}}">
+                <input class="col-md-2 input-border-color" disabled value="{{project.Lead.Username}}">
+            </div>
+
+            <div class="col-md-12 pad-top-20">
+                <div class="col-md-6">
+                    <label>Priorities:</label>
+                    <span ng-repeat="priority in project.Priorities">{{priority.Name}}<span ng-if="!$last">, </span></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Labels:</label>
+                    <span ng-repeat="label in project.Labels">{{label.Name}}<span ng-if="!$last">, </span></span>
+                </div>
             </div>
         </div>
-        <img ng-src="{{separatorImage}}" class="formImage">
+        <div ng-if="projectLoading" class="grayLoader">Loading...</div>
+    </div>
+
+    <div class="formField grayInfo col-md-10 col-md-offset-1">
+
+        <h2 class="whiteText title">Issues:</h2>
+        <table ng-cloak class="table table-condensed table-striped" ng-if="!issuesLoading && issues.length > 0">
+            <thead>
+            <tr>
+                <th class="whiteText increased col-md-3">Title</th>
+                <th class="whiteText increased col-md-3">Description</th>
+                <th class="whiteText increased col-md-3">Project</th>
+                <th class="whiteText increased col-md-3">Due Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="issue in issues">
+                <td><a href="#/issues/{{issue.Id}}">{{issue.Title}}</a></td>
+                <td>{{issue.Description}}</td>
+                <td><a href="#/projects/{{issue.Project.Id}}">{{issue.Project.Name}}</a></td>
+                <td>{{issue.DueDate}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-if="issuesLoading" class="loader">Loading...</div>
+        <div ng-if="issues.length == 0">
+            No issues found.
+        </div>
+        <uib-pagination ng-if="allIssues.length" total-items="allIssues.length" ng-model="issuesParams.pageNumber"
+                        items-per-page="issuesParams.pageSize" ng-change="reloadPage()"
+                        max-size="5" boundary-links="true" template-url="views/pagination/pagination.html">
+        </uib-pagination>
     </div>
 </div>

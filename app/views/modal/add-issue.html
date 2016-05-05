@@ -1,0 +1,46 @@
+<div class="modal-header">
+    <h2 class="modal-title">Add Issue</h2>
+</div>
+<div class="modal-body">
+    <img ng-src="{{separatorImage}}" class="formImage">
+
+    <label class="formLabel" for="title">Title:</label>
+
+    <input class="formTextInput2" type="text" id="title" ng-model="issue.Title" required/>
+
+    <label class="formLabel" for="description">Description:</label>
+    <textarea class="formTextInput2" id="description" ng-model="issue.Description"></textarea>
+
+    <label  class="formLabel">Project</label>
+    <select disabled class="formSelect">
+        <option selected value="{{project.Id}}">{{project.Name}}</option>
+    </select>
+
+    <label  class="formLabel" for="assigneeId">Assignee Id</label>
+    <input class="formTextInput2" type="text" id="assigneeId" disabled ng-model="issue.Assignee.Id" required/>
+
+    <label  class="formLabel">Priority</label>
+    <select class="formSelect">
+        <option ng-repeat="priority in project.Priorities" value="{{priority.Id}}">{{priority.Name}}</option>
+    </select>
+
+    <label>Due Date</label>
+    <div class="row">
+        <div class="col-md-6">
+            <p class="input-group">
+                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt"
+                       is-open="datepicker.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"
+                       alt-input-formats="altInputFormats"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="openDatepicker()"><i
+                    class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+            </p>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="addIssue()">Add Issue</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

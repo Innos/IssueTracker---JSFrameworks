@@ -4,12 +4,12 @@ angular.module('issueTracker.services')
     .factory('notifyService', function () {
     return {
         showInfo: function (msg) {
-            noty({text: msg, type: 'info', layout: 'topCenter', timeout: 1000});
+            noty({text: msg, type: 'success', layout: 'topCenter', timeout: 1000});
         }, showError: function (msg, serverError) {
             // Collect errors to display from the server response
             var errors = [];
-            if (serverError && serverError.error_description) {
-                errors.push(serverError.error_description);
+            if (serverError && serverError.Message) {
+                errors.push(serverError.Message);
             }
             if (serverError && serverError.ModelState) {
                 var modelStateErrors = serverError.ModelState;

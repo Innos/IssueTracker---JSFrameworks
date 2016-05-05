@@ -10,7 +10,7 @@ angular.module('issueTracker.services')
             $http.post(url, data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
                 .success(function success(data) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
-                    setIdentity().then(function () {
+                    setIdentity(data.access_token).then(function () {
                         defered.resolve(data);
                     });
                 })
@@ -26,8 +26,11 @@ angular.module('issueTracker.services')
             var url = baseUrl + 'api/Account/Register';
             $http.post(url, user)
                 .success(function success() {
+                    $http.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
                     login(user).then(function success(userData) {
-                        defered.resolve(userData);
+                        setIdentity(userData.access_token).then(function () {
+                            defered.resolve(userData);
+                        });
                     })
                 })
                 .error(function error(err) {
@@ -37,13 +40,13 @@ angular.module('issueTracker.services')
             return defered.promise;
         }
 
-        function setIdentity() {
+        function setIdentity(accessToken) {
             var defered = $q.defer();
             var url = baseUrl + 'users/me';
 
-            $http.get(url).success(function success(data) {
-                identityService.setIdentity(data);
-                defered.resolve(data);
+            $http.get(url).success(function success(user) {
+                identityService.setIdentity(user,accessToken);
+                defered.resolve(user);
             });
 
             return defered.promise;
@@ -65,7 +68,6 @@ angular.module('issueTracker.services')
         }
 
         function logout() {
-            $http.defaults.headers.common.Authorization = null;
             identityService.removeIdentity();
         }
 

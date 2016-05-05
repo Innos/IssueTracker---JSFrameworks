@@ -3,39 +3,40 @@
 angular.module('issueTracker.services')
     .factory('identityService', [function () {
 
-        var id = null;
-        var username = null;
-        var userIsAdmin = false;
-        var isLoggedIn = false;
-
-        function setIdentity(user) {
-            id = user.Id;
-            username = user.Username;
-            userIsAdmin = user.isAdmin;
-            isLoggedIn = true;
+        function setIdentity(user,accessToken) {
+            sessionStorage.setItem('id',user.Id);
+            sessionStorage.setItem('username',user.Username);
+            sessionStorage.setItem('isAdmin',user.isAdmin);
+            sessionStorage.setItem('isLoggedIn',true);
+            sessionStorage.setItem('accessToken',accessToken);
         }
 
         function removeIdentity() {
-            id = null;
-            username = null;
-            userIsAdmin = false;
-            isLoggedIn = false;
+            sessionStorage.removeItem('id');
+            sessionStorage.removeItem('username');
+            sessionStorage.removeItem('isAdmin');
+            sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('accessToken');
         }
 
         function getId() {
-            return id;
+            return sessionStorage.getItem('id');
         }
 
         function getUsername() {
-            return username;
+            return sessionStorage.getItem('username');
         }
 
         function isAdmin() {
-            return userIsAdmin;
+            return sessionStorage.getItem('isAdmin');
         }
 
         function isLogged() {
-            return isLoggedIn;
+            return sessionStorage.getItem('isLoggedIn');
+        }
+
+        function getAccessToken(){
+            return sessionStorage.getItem('accessToken');
         }
 
         return {
@@ -43,6 +44,7 @@ angular.module('issueTracker.services')
             removeIdentity: removeIdentity,
             getId: getId,
             getUsername: getUsername,
+            getAccessToken:getAccessToken,
             isAdmin: isAdmin,
             isLogged: isLogged
         }

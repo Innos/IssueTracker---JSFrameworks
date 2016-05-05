@@ -3,7 +3,12 @@
 angular.module('issueTracker.services')
     .factory('projectsService', ['$http', '$q', 'baseUrl', 'identityService', function ($http, $q, baseUrl, identityService) {
 
+        function setHeaders() {
+            $http.defaults.headers.common.Authorization = 'Bearer ' + identityService.getAccessToken();
+        }
+
         function getProjects(id) {
+            setHeaders();
             var defered = $q.defer();
             var url = baseUrl + 'projects/' + id;
             $http.get(url)
@@ -25,7 +30,23 @@ angular.module('issueTracker.services')
             return getProjects(id)
         }
 
+        function getAllIssuesByProjectId(id) {
+            setHeaders();
+            var defered = $q.defer();
+            var url = baseUrl + 'projects/' + id + '/issues';
+            $http.get(url)
+                .success(function success(data) {
+                    defered.resolve(data);
+                })
+                .error(function error(err) {
+                    defered.reject(err);
+                });
+
+            return defered.promise;
+        }
+
         function getMyProjects(requestParams) {
+            setHeaders();
             var pageSize = requestParams.pageSize || 10;
             var pageNumber = requestParams.pageNumber || 1;
 
@@ -46,6 +67,7 @@ angular.module('issueTracker.services')
         }
 
         function getByQuery(query, requestParams) {
+            setHeaders();
             var pageSize = requestParams.pageSize || 10;
             var pageNumber = requestParams.pageNumber || 1;
 
@@ -64,6 +86,7 @@ angular.module('issueTracker.services')
         }
 
         function postProject(project) {
+            setHeaders();
             var defered = $q.defer();
             var url = baseUrl + 'projects';
             $http.post(url, project)
@@ -78,6 +101,7 @@ angular.module('issueTracker.services')
         }
 
         function updateProject(id, project) {
+            setHeaders();
             var defered = $q.defer();
             var url = baseUrl + 'projects/' + id;
             $http.put(url, project)
@@ -93,6 +117,7 @@ angular.module('issueTracker.services')
 
         return {
             getAll: getAll,
+            getAllIssuesByProjectId:getAllIssuesByProjectId,
             getById: getById,
             getByQuery: getByQuery,
             getMyProjects:getMyProjects,
