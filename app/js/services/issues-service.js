@@ -28,6 +28,7 @@ angular.module('issueTracker.services')
 
         function getMyIssues(requestParams) {
             headersService.setHeaders();
+
             var pageSize = requestParams.pageSize || 10;
             var pageNumber = requestParams.pageNumber || 1;
 
@@ -46,8 +47,14 @@ angular.module('issueTracker.services')
 
         function getByQuery(query, requestParams) {
             headersService.setHeaders();
-            var pageSize = requestParams.pageSize || 10;
-            var pageNumber = requestParams.pageNumber || 1;
+
+            var pageSize = 10000;
+            var pageNumber = 1;
+
+            if(requestParams){
+                pageSize = requestParams.pageSize;
+                pageNumber = requestParams.pageNumber;
+            }
 
             var defered = $q.defer();
             var url = baseUrl + 'issues?' + 'filter=' + query + '&pageSize=' + pageSize + '&pageNumber=' + pageNumber;
@@ -107,6 +114,36 @@ angular.module('issueTracker.services')
             return defered.promise;
         }
 
+        function postComment(id, comment) {
+            headersService.setHeaders();
+            var defered = $q.defer();
+            var url = baseUrl + 'issues/' + id + '/comments';
+            $http.post(url,comment)
+                .success(function success(data) {
+                    defered.resolve();
+                })
+                .error(function error(err) {
+                    defered.reject(err);
+                });
+
+            return defered.promise;
+        }
+
+        function getComments(id) {
+            headersService.setHeaders();
+            var defered = $q.defer();
+            var url = baseUrl + 'issues/' + id + '/comments';
+            $http.get(url)
+                .success(function success(data) {
+                    defered.resolve(data);
+                })
+                .error(function error(err) {
+                    defered.reject(err);
+                });
+
+            return defered.promise;
+        }
+
         return {
             getAll: getAll,
             getById: getById,
@@ -114,6 +151,8 @@ angular.module('issueTracker.services')
             getMyIssues: getMyIssues,
             postIssue: postIssue,
             updateIssue: updateIssue,
-            changeStatus: changeStatus
+            changeStatus: changeStatus,
+            postComment:postComment,
+            getComments:getComments
         }
     }]);

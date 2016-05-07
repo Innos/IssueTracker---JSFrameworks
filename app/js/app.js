@@ -28,10 +28,11 @@ angular.module('issueTracker', [
                 $rootScope.title = current.$$route.title;
             }
         });
+
         $rootScope.$on('$locationChangeStart',function(event){
-            if($location.path() !== "/" && !identityService.isLogged()){
+            if($location.path() != "/" && !identityService.isLogged()){
                 $location.path("/");
-                notifyService.showError("Insufficient privilidges!");
+                notifyService.showInfo("You need to login or register to start");
             }
 
             if(($location.path() === "/projects/add" || $location.path() === "/projects") && identityService.isAdmin() === 'false'){

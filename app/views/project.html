@@ -39,7 +39,15 @@
 
     <div class="formField grayInfo col-md-10 col-md-offset-1">
 
-        <h2 class="whiteText title">Issues:</h2>
+        <h2 class="whiteText title col-md-4">Issues:</h2>
+        <label class="col-md-2">Filter:</label>
+        <select class="col-md-6" ng-change="onChangeFilter(currentVal)" ng-model="currentVal">
+            <option value="mine">My Issues</option>
+            <option value="all">All</option>
+            <option value="commented">I have commented on</option>
+            <option value="open">With Open Status</option>
+            <option value="today">With DueDate Today</option>
+        </select>
         <table ng-cloak class="table table-condensed table-striped" ng-show="!issuesLoading && issues.length > 0">
             <thead>
             <tr>
@@ -50,7 +58,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="issue in issues">
+            <tr ng-repeat="issue in issues | filter: byFunc(myFilter)">
                 <td><a href="#/issues/{{issue.Id}}">{{issue.Title}}</a></td>
                 <td>{{issue.Description}}</td>
                 <td><a href="#/projects/{{issue.Project.Id}}">{{issue.Project.Name}}</a></td>
@@ -59,7 +67,7 @@
             </tbody>
         </table>
         <div ng-if="issuesLoading" class="loader">Loading...</div>
-        <div ng-if="issues.length == 0">
+        <div ng-if="issues.length == 0" class="whiteText increased col-md-12">
             No issues found.
         </div>
         <uib-pagination ng-if="allIssues.length" total-items="allIssues.length" ng-model="issuesParams.pageNumber"

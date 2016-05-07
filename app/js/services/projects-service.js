@@ -64,8 +64,14 @@ angular.module('issueTracker.services')
 
         function getByQuery(query, requestParams) {
             headersService.setHeaders();
-            var pageSize = requestParams.pageSize || 10;
-            var pageNumber = requestParams.pageNumber || 1;
+
+            var pageSize = 10000;
+            var pageNumber = 1;
+
+            if(requestParams){
+                pageSize = requestParams.pageSize;
+                pageNumber = requestParams.pageNumber;
+            }
 
             var defered = $q.defer();
 

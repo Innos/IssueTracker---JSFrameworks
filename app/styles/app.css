@@ -94,6 +94,12 @@ table{
     word-wrap: break-word;
 }
 
+.overflow{
+    overflow: auto;
+    text-overflow: clip;
+    white-space: normal;
+}
+
 td {
     overflow: hidden;
     text-overflow: ellipsis;

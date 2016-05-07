@@ -14,8 +14,9 @@ angular.module("issueTracker.controllers")
             var id = $routeParams['id'];
 
             $scope.canEdit = null;
+            $scope.canPost = null;
 
-            $scope.reloadIssue = function(){
+            $scope.reloadIssue = function () {
                 $scope.loadingIssue = true;
 
                 issuesService.getById(id).then(function success(data) {
@@ -25,11 +26,28 @@ angular.module("issueTracker.controllers")
                         return el.Name;
                     });
                     $scope.deadline = Date.parse($scope.issue.DueDate);
-                    if(data.Author.Id === identityService.getId() || data.Assignee.Id === identityService.getId() || identityService.isAdmin() === 'true'){
+                    if (data.Author.Id === identityService.getId() || data.Assignee.Id === identityService.getId() || identityService.isAdmin() === 'true') {
                         $scope.canEdit = true;
                     }
                     $rootScope.$broadcast("pageChanged", data.Title);
                     $scope.isClosed = data.Status.Name === "Closed" ? "btn-danger" : "btn-success";
+
+                    // resolve if the user can Post Comments
+                    if ($scope.issue.Author.Id === identityService.getId() || identityService.isAdmin()==='true') {
+                        $scope.canPost = true;
+                    }
+                    if (!$scope.canPost) {
+                        issuesService.getMyIssues().then(function success(data) {
+                            if (data.Issues.some(function (el) {
+                                    return el.Project.Id === $scope.issue.Project.Id;
+                                })) {
+                                $scope.canPost = true;
+                            }
+                        }, function error(err) {
+                            notifyService.showError("Error could not resolve issues: ", err);
+                        });
+                    }
+
                 }, function error(err) {
                     notifyService.showError("Error loading issue:", err);
                 });
@@ -44,5 +62,26 @@ angular.module("issueTracker.controllers")
                 })
             };
 
+            $scope.reloadComments = function () {
+                issuesService.getComments(id).then(function success(data) {
+                    $scope.comments = data;
+                }, function error(err) {
+                    notifyService.showError("Error could not resolve comments: ", err);
+                })
+            };
+
+            $scope.postComment = function (commentText) {
+                var newComment = {
+                    Text: commentText
+                };
+                issuesService.postComment(id, newComment).then(function success(data) {
+                    notifyService.showInfo("Comment posted succesfully!");
+                    $scope.reloadComments();
+                }, function error(err) {
+                    notifyService.showError("Error could not post comment: ", err);
+                })
+            };
+
             $scope.reloadIssue();
+            $scope.reloadComments();
         }]);
