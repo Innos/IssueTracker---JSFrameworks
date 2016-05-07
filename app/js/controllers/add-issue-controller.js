@@ -20,19 +20,30 @@ angular.module("issueTracker.controllers")
             }
         });
     }])
-    .controller('AddIssueController', ['$scope', '$uibModalInstance', '$location','projectsService', 'issuesService','notifyService', 'id',
-        function ($scope, $uibModalInstance, $location, projectsService, issuesService, notifyService, id) {
+    .controller('AddIssueController', ['$scope', '$uibModalInstance', '$location','projectsService', 'issuesService','usersService','labelsService', 'notifyService', 'id',
+        function ($scope, $uibModalInstance, $location, projectsService, issuesService,usersService,labelsService, notifyService, id) {
+
+            $scope.issue = {};
+            $scope.issue.ProjectId = id;
+            $scope.loadingProject = true;
+            $scope.loadingUsers = true;
 
             projectsService.getById(id).then(function success(data){
+                $scope.loadingProject = false;
                 $scope.project = data;
             },function error(err){
                 notifyService.showError('Error accessing project:', err);
             });
 
-
+            usersService.getAll().then(function success(data){
+                $scope.loadingUsers = false;
+                $scope.users = data;
+            },function error(err){
+                notifyService.showError('Error accessing users:', err);
+            });
 
             $scope.addIssue = function () {
-                issuesService.postIssue(issue).then(function success(data) {
+                issuesService.postIssue($scope.issue).then(function success(data) {
                     $uibModalInstance.close();
                     $location.path('/projects/' + id);
                     notifyService.showInfo('Issue added successfully');
@@ -51,7 +62,7 @@ angular.module("issueTracker.controllers")
 
             //Datepicker
             $scope.today = function() {
-                $scope.dt = new Date();
+                $scope.issue.DueDate = new Date();
             };
             $scope.today();
 
@@ -74,5 +85,49 @@ angular.module("issueTracker.controllers")
                 startingDay: 1
             };
 
+
+            //Labels
+
+            $scope.issue.Labels = [];
+
+            $scope.transformChip = function(chip) {
+
+                //check for duplicates
+                var duplicate = null;
+                if(angular.isObject(chip)){
+                    $scope.issue.Labels.forEach(function(el){
+                        if(el.Name === chip.Name){
+                            duplicate = el;
+                            return;
+                        }
+                    });
+                }
+                else{
+                    $scope.issue.Labels.forEach(function(el){
+                        if(el.Name === chip){
+                            duplicate = el;
+                            return;
+                        }
+                    });
+                }
+
+                // if the chip is a duplicate return the existing chip
+                if(duplicate){
+                    return duplicate;
+                }
+
+                if (angular.isObject(chip)) {
+                    return chip;
+                }
+
+                // If it isn't return a new one
+                return { Name: chip }
+
+            };
+
+            $scope.getLabels = function(searchText){
+                var label = searchText.substring(searchText.indexOf(',')+ 1 || 0);
+                return labelsService.getByQuery(label);
+            };
 
         }]);

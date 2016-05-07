@@ -1,16 +1,12 @@
 'use strict';
 
 angular.module('issueTracker.services')
-    .factory('issuesService', ['$http', '$q', 'baseUrl', 'identityService', function ($http, $q, baseUrl, identityService) {
-
-        function setHeaders() {
-            $http.defaults.headers.common.Authorization = 'Bearer ' + identityService.getAccessToken();
-        }
+    .factory('issuesService', ['$http', '$q', 'baseUrl', 'identityService','headersService', function ($http, $q, baseUrl, identityService,headersService) {
 
         function getIssues(id,requestParams) {
-            setHeaders();
+            headersService.setHeaders();
             var defered = $q.defer();
-            var url = baseUrl + 'projects/' + id;
+            var url = baseUrl + 'issues/' + id;
             $http.get(url)
                 .success(function success(data) {
                     defered.resolve(data);
@@ -31,7 +27,7 @@ angular.module('issueTracker.services')
         }
 
         function getMyIssues(requestParams) {
-            setHeaders();
+            headersService.setHeaders();
             var pageSize = requestParams.pageSize || 10;
             var pageNumber = requestParams.pageNumber || 1;
 
@@ -49,7 +45,7 @@ angular.module('issueTracker.services')
         }
 
         function getByQuery(query, requestParams) {
-            setHeaders();
+            headersService.setHeaders();
             var pageSize = requestParams.pageSize || 10;
             var pageNumber = requestParams.pageNumber || 1;
 
@@ -67,10 +63,25 @@ angular.module('issueTracker.services')
         }
 
         function postIssue(issue) {
-            setHeaders();
+            headersService.setHeaders();
             var defered = $q.defer();
             var url = baseUrl + 'issues';
             $http.post(url, issue)
+                .success(function success(data) {
+                    defered.resolve(data);
+                })
+                .error(function error(err) {
+                    defered.reject(err);
+                });
+
+            return defered.promise;
+        }
+
+        function updateIssue(id, issue) {
+            headersService.setHeaders();
+            var defered = $q.defer();
+            var url = baseUrl + 'issues/' + id;
+            $http.put(url, issue)
                 .success(function success(data) {
                     defered.resolve();
                 })
@@ -81,11 +92,11 @@ angular.module('issueTracker.services')
             return defered.promise;
         }
 
-        function updateIssue(id, issue) {
-            setHeaders();
+        function changeStatus(id, statusId) {
+            headersService.setHeaders();
             var defered = $q.defer();
-            var url = baseUrl + 'issues/' + id;
-            $http.put(url, issue)
+            var url = baseUrl + 'issues/' + id + "/changeStatus?statusId=" + statusId;
+            $http.put(url)
                 .success(function success(data) {
                     defered.resolve();
                 })
@@ -102,6 +113,7 @@ angular.module('issueTracker.services')
             getByQuery: getByQuery,
             getMyIssues: getMyIssues,
             postIssue: postIssue,
-            updateIssue: updateIssue
+            updateIssue: updateIssue,
+            changeStatus: changeStatus
         }
     }]);

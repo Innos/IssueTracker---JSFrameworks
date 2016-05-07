@@ -3,11 +3,14 @@
 angular.module('issueTracker.services')
     .factory('identityService', [function () {
 
-        function setIdentity(user,accessToken) {
+        function setIdentity(user) {
             sessionStorage.setItem('id',user.Id);
             sessionStorage.setItem('username',user.Username);
             sessionStorage.setItem('isAdmin',user.isAdmin);
             sessionStorage.setItem('isLoggedIn',true);
+        }
+
+        function setAccessToken(accessToken){
             sessionStorage.setItem('accessToken',accessToken);
         }
 
@@ -41,6 +44,7 @@ angular.module('issueTracker.services')
 
         return {
             setIdentity: setIdentity,
+            setAccessToken:setAccessToken,
             removeIdentity: removeIdentity,
             getId: getId,
             getUsername: getUsername,

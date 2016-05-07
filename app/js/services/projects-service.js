@@ -1,14 +1,10 @@
 'use strict';
 
 angular.module('issueTracker.services')
-    .factory('projectsService', ['$http', '$q', 'baseUrl', 'identityService', function ($http, $q, baseUrl, identityService) {
-
-        function setHeaders() {
-            $http.defaults.headers.common.Authorization = 'Bearer ' + identityService.getAccessToken();
-        }
+    .factory('projectsService', ['$http', '$q', 'baseUrl', 'identityService','headersService', function ($http, $q, baseUrl, identityService,headersService) {
 
         function getProjects(id) {
-            setHeaders();
+            headersService.setHeaders();
             var defered = $q.defer();
             var url = baseUrl + 'projects/' + id;
             $http.get(url)
@@ -31,7 +27,7 @@ angular.module('issueTracker.services')
         }
 
         function getAllIssuesByProjectId(id) {
-            setHeaders();
+            headersService.setHeaders();
             var defered = $q.defer();
             var url = baseUrl + 'projects/' + id + '/issues';
             $http.get(url)
@@ -46,7 +42,7 @@ angular.module('issueTracker.services')
         }
 
         function getMyProjects(requestParams) {
-            setHeaders();
+            headersService.setHeaders();
             var pageSize = requestParams.pageSize || 10;
             var pageNumber = requestParams.pageNumber || 1;
 
@@ -67,7 +63,7 @@ angular.module('issueTracker.services')
         }
 
         function getByQuery(query, requestParams) {
-            setHeaders();
+            headersService.setHeaders();
             var pageSize = requestParams.pageSize || 10;
             var pageNumber = requestParams.pageNumber || 1;
 
@@ -86,7 +82,7 @@ angular.module('issueTracker.services')
         }
 
         function postProject(project) {
-            setHeaders();
+            headersService.setHeaders();
             var defered = $q.defer();
             var url = baseUrl + 'projects';
             $http.post(url, project)
@@ -101,7 +97,7 @@ angular.module('issueTracker.services')
         }
 
         function updateProject(id, project) {
-            setHeaders();
+            headersService.setHeaders();
             var defered = $q.defer();
             var url = baseUrl + 'projects/' + id;
             $http.put(url, project)

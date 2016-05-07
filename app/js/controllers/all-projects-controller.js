@@ -4,6 +4,21 @@ angular.module("issueTracker.controllers")
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/projects', {
             title: 'Projects',
+            resolve: {
+                access: ['$q','$location', '$route', 'identityService', 'notifyService', 'projectsService', function ($q,$location, $route, identityService, notifyService, projectsService) {
+
+                    var defered = $q.defer();
+
+                    if (identityService.isAdmin() === 'false') {
+                        notifyService.showError("Error insufficient authorization!");
+                        $location.path('/');
+                        defered.reject();
+                    }
+                    defered.resolve();
+
+                    return defered.promise;
+                }]
+            },
             templateUrl: 'views/all-projects.html',
             controller: 'AllProjectsController'
         });
@@ -47,10 +62,11 @@ angular.module("issueTracker.controllers")
             };
 
             function changePage(){
+
                 var start = ($scope.projectsParams.pageNumber - 1) * $scope.projectsParams.pageSize;
                 var end = $scope.projectsParams.pageNumber * $scope.projectsParams.pageSize;
-                if(end >= $scope.allProjects.length){
-                    end = $scope.allProjects.length - 1;
+                if(end > $scope.allProjects.length){
+                    end = $scope.allProjects.length;
                 }
                 $scope.projects = $scope.allProjects.slice(start,end);
             }

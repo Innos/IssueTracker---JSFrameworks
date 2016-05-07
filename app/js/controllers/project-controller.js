@@ -29,6 +29,7 @@ angular.module("issueTracker.controllers")
                 pageSize: 5
             };
 
+            $scope.isAuthorized = null;
             $scope.issuesLoading = true;
             $scope.projectLoading = true;
 
@@ -39,7 +40,12 @@ angular.module("issueTracker.controllers")
                 function success(data) {
                     $scope.project = data;
                     $scope.projectLoading = false;
-                    $scope.isAuthorized = (identityService.isAdmin() || $scope.project.Lead.Id === identityService.getId()) === 'true';
+                    if(data.Lead.Id === identityService.getId() || identityService.isAdmin() === 'true'){
+                        $scope.isAuthorized = true;
+                    }
+                    $scope.labels = data.Labels.map(function(el){
+                        return el.Name;
+                    });
                     $rootScope.$broadcast("pageChanged", data.Name);
                 }, function error(err) {
                     notifyService.showError("Error accessing Project: ", err);
@@ -65,8 +71,8 @@ angular.module("issueTracker.controllers")
             function changePage() {
                 var start = ($scope.issuesParams.pageNumber - 1) * $scope.issuesParams.pageSize;
                 var end = $scope.issuesParams.pageNumber * $scope.issuesParams.pageSize;
-                if (end >= $scope.allIssues.length) {
-                    end = $scope.allIssues.length - 1;
+                if (end > $scope.allIssues.length) {
+                    end = $scope.allIssues.length;
                 }
                 $scope.issues = $scope.allIssues.slice(start, end);
             }

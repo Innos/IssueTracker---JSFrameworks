@@ -3,9 +3,9 @@
 <div>
     <div class="formField info col-md-10 col-md-offset-1">
         <h2 class="color-navyBlue title col-md-3">Information:</h2>
-        <a ng-show="isAuthorized" class="btn btn-warning col-md-2 col-md-offset-5 sideMargin-5" href="#/projects/{{project.Id}}/edit">Edit Project</a>
-        <a ng-show="isAuthorized" class="btn btn-primary col-md-2 sideMargin-5" href="#/projects/{{project.Id}}/add-issue">Add Issue</a>
-        <div ng-cloak ng-if="!projectLoading">
+        <a ng-if="isAuthorized" class="btn btn-warning col-md-2 col-md-offset-5 sideMargin-5" href="#/projects/{{project.Id}}/edit">Edit Project</a>
+        <a ng-if="isAuthorized" class="btn btn-primary col-md-2 sideMargin-5" href="#/projects/{{project.Id}}/add-issue">Add Issue</a>
+        <div ng-cloak ng-show="!projectLoading">
             <div class="col-md-12">
                 <label class="col-md-2">Name:</label>
                 <input class="col-md-2 input-border-color" disabled value="{{project.Name}}">
@@ -23,14 +23,14 @@
             </div>
 
             <div class="col-md-12 pad-top-20">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label>Priorities:</label>
                     <span ng-repeat="priority in project.Priorities">{{priority.Name}}<span ng-if="!$last">, </span></span>
                 </div>
 
-                <div class="col-md-6">
-                    <label>Labels:</label>
-                    <span ng-repeat="label in project.Labels">{{label.Name}}<span ng-if="!$last">, </span></span>
+                <div class="col-md-8 no-padding">
+                    <label class="col-md-1">Labels:</label>
+                    <md-chips class="col-md-11" ng-model="labels" readonly="true"></md-chips>
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@
     <div class="formField grayInfo col-md-10 col-md-offset-1">
 
         <h2 class="whiteText title">Issues:</h2>
-        <table ng-cloak class="table table-condensed table-striped" ng-if="!issuesLoading && issues.length > 0">
+        <table ng-cloak class="table table-condensed table-striped" ng-show="!issuesLoading && issues.length > 0">
             <thead>
             <tr>
                 <th class="whiteText increased col-md-3">Title</th>

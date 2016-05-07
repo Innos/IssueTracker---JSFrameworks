@@ -118,5 +118,6 @@
                         max-size="5" boundary-links="true" template-url="views/pagination/pagination.html">
         </uib-pagination>
     </section>
-
+    <a ng-if="identityService.isAdmin()" class="btn btn-primary col-md-1 col-md-offset-1" href="#/projects/add">Add Project</a>
+    <a ng-if="identityService.isAdmin()" class="btn btn-info col-md-1" href="#/projects">All Projects</a>
 </div>

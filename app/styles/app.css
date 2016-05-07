@@ -56,7 +56,6 @@ textarea{
 .formSelect{
     border: 1px solid dodgerblue;
     border-radius: 5px;
-    width: 100%;
     line-height: 2;
     padding: 5px;
     font-weight: bold;
@@ -101,7 +100,7 @@ td {
     white-space: nowrap;
 }
 
-#pageTitle {
+.container>.navbar-header>.pageTitle{
     color: #003399;
     font-size: 2em;
 }
@@ -127,6 +126,15 @@ td {
 h2{
     margin-top: 0px;
 }
+
+.no-padding{
+    padding: 0;
+}
+
+.no-margin{
+    margin: 0;
+}
+
 
 /* colors */
 
@@ -207,6 +215,19 @@ h2{
     width: 10em;
     height: 10em;
 }
+
+.small-Loader{
+    width: 3em;
+    height: 3em;
+}
+
+.loader.ng-animate, .grayLoader.ng-animate {
+    transition:0s none;
+    -webkit-transition:0s none;
+    animation: 0s none;
+    -webkit-animation: 0s none;
+}
+
 @-webkit-keyframes load8 {
     0% {
         -webkit-transform: rotate(0deg);
@@ -227,3 +248,11 @@ h2{
         transform: rotate(360deg);
     }
 }
+
+/* Autocomplete */
+.md-virtual-repeat-container.md-autocomplete-suggestions-container{
+    z-index: 2000;
+    position: absolute;
+}
+
+
