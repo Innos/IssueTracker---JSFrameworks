@@ -16,10 +16,8 @@
         </select>
 
         <label class="formLabel">Assignee:</label>
-        <select ng-required="true" ng-model="issue.AssigneeId" class="formSelect">
-            <option ng-repeat="user in users | orderBy:'Username'" value="{{user.Id}}">{{user.Username}}</option>
+        <select ng-required="true" ng-model="issue.AssigneeId" ng-options="user as user.Username for user in users | orderBy: 'Username' track by user.Id" class="formSelect">
         </select>
-
 
         <label class="formLabel">Priority:</label>
         <select ng-required="true" ng-model="issue.PriorityId" class="formSelect">

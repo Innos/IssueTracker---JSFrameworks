@@ -18,16 +18,14 @@
                 <input class="col-md-2 input-border-color" ng-model="issue.IssueKey" ng-disabled="!canEdit" value="{{issue.IssueKey}}" required>
 
                 <label class="col-md-2">Assignee:</label>
-                <select ng-disabled="!canEdit" ng-required="true" ng-model="issue.Assignee.Id" class="formSelect col-md-4">
-                    <option  ng-repeat="user in users | orderBy:'Username'"  value="{{user.Id}}">{{user.Username}}</option>
+                <select ng-disabled="!canEdit" ng-required="true" ng-model="issue.Assignee.Id" ng-options="user as user.Username for user in users | orderBy: 'Username' track by user.Id" class="formSelect col-md-4">
                 </select>
             </div>
 
             <div class="col-md-12 pad-top-20">
                 <div class="col-md-4 no-padding">
                     <label class="col-md-6">Priority:</label>
-                    <select ng-disabled="!canEdit" ng-required="true" ng-model="issue.Priority.Id" class="formSelect col-md-6">
-                        <option ng-selected="issue.Priority.Id === priority.Id" ng-repeat="priority in priorities" ng-value="priority.Id">{{priority.Name}}</option>
+                    <select ng-disabled="!canEdit" ng-required="true" ng-model="issue.Priority.Id" ng-options="priority as priority.Name for priority in priorities track by priority.Id" class="formSelect col-md-6">
                     </select>
                 </div>
 

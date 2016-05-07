@@ -65,6 +65,9 @@ angular.module("issueTracker.controllers")
             // new load checks here
             if (identityService.isLogged()) {
                 $rootScope.$broadcast("pageChanged", "Dashboard");
+                if(identityService.isAdmin()==='true'){
+                    $scope.isAdmin = true;
+                }
                 $scope.reloadIssues();
                 $scope.reloadProjects();
             }
@@ -97,5 +100,8 @@ angular.module("issueTracker.controllers")
                     })
             };
 
+            $scope.isAdmin = function(){
+                return identityService.isAdmin()==='true';
+            };
 
         }]);

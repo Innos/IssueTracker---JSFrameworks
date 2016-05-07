@@ -42,6 +42,7 @@ angular.module("issueTracker.controllers")
                 notifyService.showError('Error accessing users:', err);
             });
 
+
             $scope.addIssue = function () {
                 issuesService.postIssue($scope.issue).then(function success(data) {
                     $uibModalInstance.close();

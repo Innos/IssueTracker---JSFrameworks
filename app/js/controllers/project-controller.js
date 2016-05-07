@@ -76,14 +76,6 @@ angular.module("issueTracker.controllers")
                                 var date = new Date(el.DueDate);
                                 var today = new Date();
                                 if (date.getYear() === today.getYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()) {
-                                    console.log(date.toDateString());
-                                    console.log(today.toDateString());
-                                    console.log(date.getDate());
-                                    console.log(today.getDate());
-                                    console.log(date.getMonth());
-                                    console.log(today.getMonth());
-                                    console.log(date.getYear());
-                                    console.log(today.getYear());
                                     return true;
                                 }
                             });

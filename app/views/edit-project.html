@@ -18,8 +18,7 @@
                 <input class="col-md-2 input-border-color" ng-model="project.ProjectKey" ng-disabled="true" value="{{project.ProjectKey}}" required>
 
                 <label class="col-md-2">Lead:</label>
-                <select ng-disabled="!isAdmin" ng-model="project.Lead.Id" class="formSelect col-md-4">
-                    <option  ng-repeat="user in users | orderBy:'Username'"  value="{{user.Id}}">{{user.Username}}</option>
+                <select ng-disabled="!isAdmin" ng-model="project.Lead.Id" ng-options="user as user.Username for user in users | orderBy: 'Username' track by user.Id" class="formSelect col-md-4">
                 </select>
             </div>
 

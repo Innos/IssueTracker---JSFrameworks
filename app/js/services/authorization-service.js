@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module('issueTracker.services')
-    .factory('authorizationService', ['$http', '$q', 'baseUrl', 'identityService', 'usersService', function ($http, $q, baseUrl, identityService, usersService) {
+    .factory('authorizationService', ['$http', '$q', 'baseUrl', 'identityService', 'usersService', 'headersService', function ($http, $q, baseUrl, identityService, usersService, headersService) {
 
         function login(user) {
             var defered = $q.defer();
@@ -31,7 +31,7 @@ angular.module('issueTracker.services')
                 .success(function success() {
                     login(user).then(function success(userData) {
                         defered.resolve(userData);
-                    }, function error(err){
+                    }, function error(err) {
                         defered.reject(err);
                     })
                 })
@@ -43,10 +43,11 @@ angular.module('issueTracker.services')
         }
 
         function changePassword(passwordData) {
+            headersService.setHeaders();
             var defered = $q.defer();
             var url = baseUrl + 'api/Account/ChangePassword';
-            var data = 'OldPassword=' + passwordData.oldPassword + '&NewPassword=' + passwordData.newPassword + '&ConfirmPassword=' + passwordData.confirmPassword;
-            $http.post(url, data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+
+            $http.post(url, passwordData)
                 .success(function success(data) {
                     defered.resolve(data);
                 })

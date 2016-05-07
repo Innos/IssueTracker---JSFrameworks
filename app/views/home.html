@@ -1,7 +1,7 @@
 <div class="headerPadding">
 </div>
 <div ng-if="!identityService.isLogged()">
-    <div class="formField col-md-4 col-md-offset-1">
+    <form name="loginForm" class="formField col-md-4 col-md-offset-1">
         <h1 class="formHeading">Login</h1>
         <img ng-src="{{separatorImage}}" class="formImage">
 
@@ -26,11 +26,11 @@
         <img ng-src="{{separatorImage}}" class="formImage">
 
         <p>
-            <a ng-click="login(loginUserData)" class="formButton btn btn-primary">Login</a>
+            <button ng-click="login(loginUserData)" ng-disabled="loginForm.$invalid" class="formButton btn btn-primary">Login</button>
 
         <p>
-    </div>
-    <div class="formField col-md-4 col-md-offset-1">
+    </form>
+    <form name="registrationForm" class="formField col-md-4 col-md-offset-1">
         <h1 class="formHeading">Register</h1>
         <img ng-src="{{separatorImage}}" class="formImage">
 
@@ -66,9 +66,9 @@
         <img ng-src="{{separatorImage}}" class="formImage">
 
         <p>
-            <a ng-click="register(registerUserData)" class="formButton btn btn-primary">Register</a>
+            <button ng-click="register(registerUserData)" ng-disabled="registrationForm.$invalid" class="formButton btn btn-primary">Register</button>
         <p>
-    </div>
+    </form>
 </div>
 <div ng-if="identityService.isLogged()" class="dashboard">
     <section class="col-md-4 col-md-offset-1">
@@ -118,6 +118,6 @@
                         max-size="5" boundary-links="true" template-url="views/pagination/pagination.html">
         </uib-pagination>
     </section>
-    <a ng-if="identityService.isAdmin()" class="btn btn-primary col-md-1 col-md-offset-1" href="#/projects/add">Add Project</a>
-    <a ng-if="identityService.isAdmin()" class="btn btn-info col-md-1" href="#/projects">All Projects</a>
+    <a ng-if="isAdmin()" class="btn btn-primary col-md-1 col-md-offset-1" href="#/projects/add">Add Project</a>
+    <a ng-if="isAdmin()" class="btn btn-info col-md-1" href="#/projects">All Projects</a>
 </div>

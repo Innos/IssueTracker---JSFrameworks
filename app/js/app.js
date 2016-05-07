@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('issueTracker.controllers', ['ngRoute','ngMaterial',]);
+angular.module('issueTracker.controllers', ['ngRoute','ngMaterial']);
 angular.module('issueTracker.services', []);
 angular.module('issueTracker.filters', []);
 angular.module('issueTracker.directives', []);
