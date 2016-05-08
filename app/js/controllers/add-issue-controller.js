@@ -44,7 +44,17 @@ angular.module("issueTracker.controllers")
 
 
             $scope.addIssue = function () {
-                issuesService.postIssue($scope.issue).then(function success(data) {
+                var newIssue = {
+                    Title: $scope.issue.Title,
+                    Description:$scope.issue.Description,
+                    ProjectId: $scope.issue.ProjectId,
+                    AssigneeId: $scope.issue.newAssignee.Id,
+                    PriorityId: $scope.issue.PriorityId,
+                    Labels: $scope.issue.Labels,
+                    DueDate:$scope.issue.DueDate
+                };
+
+                issuesService.postIssue(newIssue).then(function success(data) {
                     $uibModalInstance.close();
                     $location.path('/projects/' + id);
                     notifyService.showInfo('Issue added successfully');

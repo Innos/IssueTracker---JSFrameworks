@@ -14,7 +14,7 @@
         <input class="formTextInput2" type="text" disabled id="projectKey" ng-model="project.ProjectKey" required/>
 
         <label class="formLabel">Lead Id:</label>
-        <select ng-required="true" ng-model="project.LeadId" ng-options="user as user.Username for user in users | orderBy: 'Username' track by user.Id" class="formSelect">
+        <select ng-required="true" ng-model="project.newLead" ng-options="user as user.Username for user in users | orderBy: 'Username' track by user.Id" class="formSelect">
         </select>
 
         <label class="formLabel" for="priorities">Priorities:</label>

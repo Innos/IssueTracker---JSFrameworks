@@ -55,12 +55,10 @@ angular.module("issueTracker.controllers")
                     Name: $scope.project.Name,
                     Description: $scope.project.Description,
                     ProjectKey: $scope.project.ProjectKey,
-                    LeadId: $scope.project.LeadId,
+                    LeadId: $scope.project.newLead.Id,
                     priorities: newPriorities,
                     Labels: $scope.project.Labels
                 };
-
-                console.log(newProject);
 
                 projectsService.postProject(newProject).then(function success(data) {
                     $uibModalInstance.close();

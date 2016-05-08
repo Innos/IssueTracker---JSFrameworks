@@ -16,7 +16,7 @@
         </select>
 
         <label class="formLabel">Assignee:</label>
-        <select ng-required="true" ng-model="issue.AssigneeId" ng-options="user as user.Username for user in users | orderBy: 'Username' track by user.Id" class="formSelect">
+        <select ng-required="true" ng-model="issue.newAssignee" ng-options="user as user.Username for user in users | orderBy: 'Username' track by user.Id" class="formSelect">
         </select>
 
         <label class="formLabel">Priority:</label>
